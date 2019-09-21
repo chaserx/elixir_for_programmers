@@ -1,0 +1,38 @@
+<div class="container">
+  <div class="row">
+    <div class="column">
+      <%= render "_gallows.html", left: @tally.turns_left %>
+    </div>
+    <div class="column">
+      <h1>Hangman</h1>
+
+      <%# inspect(@tally) %>
+      <%= game_state(@tally.game_state) %>
+
+      <p>
+        Turns left: <%= @tally.turns_left %>
+      </p>
+
+      <p>
+        Word so far: <%= format_word(@tally.letters) %>
+      </p>
+
+      <%= if game_over?(@tally.game_state) do %>
+        <p>
+          The word was: <%= @tally.word %><br />
+          Hey, do you wanna play again?<br />
+        </p>
+        <%= new_game_button(@conn) %>
+      <% else %>
+        <%= form_for @conn, Routes.hangman_path(@conn, :make_move), [ as: :make_move, method: :put], fn f -> %>
+
+          <label>
+            Guess <%= text_input(f, :guess) %>
+          </label>
+
+          <%= submit "Make Your Move" %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
